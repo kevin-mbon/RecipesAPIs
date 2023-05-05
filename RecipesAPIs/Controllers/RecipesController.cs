@@ -2,11 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using RecipesAPIs.Models;
 using RecipesAPIs.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using RecipesAPIs;
+using System.Collections.Immutable;
+using System.Net.Mime;
 
 namespace RecipesAPIs.Controllers
 {
     [Route("api/[controller]")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
     public class RecipesController : ControllerBase
     {
@@ -16,16 +21,41 @@ namespace RecipesAPIs.Controllers
         {
             this.recipeServices = recipeServices;
         }
+      
         [HttpGet]
-        public ActionResult<List<Recipe>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<Recipe>> GetRecipesByCount([FromQuery] int count = 3)
         {
-            return recipeServices.Get();
+            if (count <= 0)
+            {
+                throw new ArgumentException("INVALID COUNT ", nameof(count));
+            }
+
+            var recipes = recipeServices.GetRecipe(count);
+
+            if (!recipes.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(recipes);
         }
-        [HttpGet("{id}")]
+
+        //return recipeServices.Get();
+    
+    /// <summary>
+    /// return recipe by id 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Recipe> Get(string id)
         {
             var recipe = recipeServices.Get(id);
-            if(recipe == null)
+            if (recipe == null)
             {
                 return NotFound($"recipe of this id = {id} not found");
 
@@ -33,28 +63,50 @@ namespace RecipesAPIs.Controllers
             return recipe;
         }
         [HttpPost]
-        public ActionResult<Recipe> Post([FromBody]Recipe recipe)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Recipe> Post([FromBody] Recipe recipe)
         {
             recipeServices.Create(recipe);
             return CreatedAtAction(nameof(Get), new { id = recipe.Id }, recipe);
 
         }
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Recipe> UpdadeRecipe(string id, [FromBody] JsonPatchDocument<Recipe> recipeUpdate)
+        {
+            var recipe = recipeServices.Get(id);
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+            recipeUpdate.ApplyTo(recipe);
+            recipeServices.Update(id, recipe);
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Recipe> PutRecipes(string id, Recipe recipe)
         {
             var existingRecipe = recipeServices.Get(id);
-            if(existingRecipe == null)
+            if (existingRecipe == null)
             {
                 return NotFound($"give id = {id}not found");
             }
+
             recipeServices.Update(id, recipe);
             return NoContent();
         }
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult DeleteRecipes(string id)
         {
             var recipe = recipeServices.Get(id);
-            if(recipe == null)
+            if (recipe == null)
             {
                 return NotFound($"THIS ID = {id} NOT FOUUND");
             }
@@ -63,3 +115,5 @@ namespace RecipesAPIs.Controllers
         }
     }
 }
+
+

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RecipesAPIs</name>
+    </assembly>
+    <members>
+        <member name="M:RecipesAPIs.Controllers.ErrorController.Error">
+            <summary>
+            if there are no error can't return anthing
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RecipesAPIs.Controllers.RecipesController.Get(System.String)">
+            <summary>
+            return recipe by id 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

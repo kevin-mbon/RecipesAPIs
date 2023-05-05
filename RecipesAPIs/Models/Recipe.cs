@@ -1,19 +1,28 @@
 ﻿using MongoDB.Bson;
+using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 namespace RecipesAPIs.Models
 {
-    public class Recipe
+    public record Recipe
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)]
         public string Id { get; set; }
         [BsonElement("title")]
+        [Required]
         public string Title { get; init; }
         [BsonElement("description")]
         public string Description { get; init; }
+        [Required]
         public IEnumerable<string> Direction { get; init; }
         public IEnumerable<string> Ingridients { get; init; }
         public DateTime Update { get; init; }
+        public override string ToString()
+        {
+            return $"Id: {Id} Title {Title} ";
+        }
+        
 
     }
 }

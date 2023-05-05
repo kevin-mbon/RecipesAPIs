@@ -27,14 +27,29 @@ namespace RecipesAPIs.Services
             return _recipe.Find(recipe => recipe.Id == id).FirstOrDefault();
         }
 
+        public Task RecipeById(string id,Recipe recipe)
+        {
+            return _recipe.ReplaceOneAsync(recipe => recipe.Id == id,recipe);
+        }
+
         public void Remove(string id)
         {
             _recipe.DeleteOne(recipe => recipe.Id == id);
+        }
+       
+        public void GetRecipes(int count)
+        {
+
         }
 
         public void Update(string id, Recipe recipe)
         {
             _recipe.ReplaceOne(recipe => recipe.Id == id, recipe);
+        }
+
+        List<Recipe> IRecipeServices.GetRecipe(int count)
+        {
+            return _recipe.Find(recipe => true).Limit(count).ToList();
         }
     }
 }
