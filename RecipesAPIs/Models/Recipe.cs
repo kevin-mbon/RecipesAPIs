@@ -7,8 +7,8 @@ namespace RecipesAPIs.Models
     public record Recipe
     {
         [BsonId]
-        [BsonRepresentation(BsonType.String)]
-        public string Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = String.Empty; 
         [BsonElement("title")]
         [Required]
         public string Title { get; init; }

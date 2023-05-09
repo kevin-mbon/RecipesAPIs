@@ -25,12 +25,12 @@ namespace RecipesAPIs.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<Recipe>> GetRecipesByCount([FromQuery] int count = 3)
+        public ActionResult<List<Recipe>> GetRecipesByCount([FromQuery] int count)
         {
-            if (count <= 0)
-            {
-                throw new ArgumentException("INVALID COUNT ", nameof(count));
-            }
+            //if (count <= 0)
+            //{
+            //    throw new ArgumentException("INVALID COUNT ", nameof(count));
+            //}
 
             var recipes = recipeServices.GetRecipe(count);
 
@@ -40,9 +40,10 @@ namespace RecipesAPIs.Controllers
             }
 
             return Ok(recipes);
+            //return recipeServices.Get();
         }
 
-        //return recipeServices.Get();
+
     
     /// <summary>
     /// return recipe by id 
