@@ -4,6 +4,9 @@ using Microsoft.OpenApi.Models;
 using RecipesAPIs.Models;
 using RecipesAPIs.Services;
 using System.Reflection;
+using Amazon.Runtime.Internal;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,11 +38,22 @@ c.SwaggerDoc("v1", new OpenApiInfo
         Email = "kevin@mail.com"
     }
 
-}));
-////xml documentation 
+}
+//xml documentation 
+
+//c.IncludeXmlComments(xmlPath);
 //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-//c.IncludeXmlComments(xmlPath);
+
+//c.CustomOperationIds(apiDiscription =>
+//    {
+//        return apiDiscription.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null;
+
+//    }
+
+));
+
+
 
 
 
@@ -51,11 +65,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
+
 }
 else {
     app.UseExceptionHandler("/error");
 }
-
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

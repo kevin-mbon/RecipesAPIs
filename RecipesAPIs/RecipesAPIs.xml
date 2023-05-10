@@ -14,8 +14,10 @@
             <summary>
             return recipe by id 
             </summary>
+            
             <param name="id"></param>
-            <returns></returns>
+            
+            <returns>This operation gets a product by its unique ID.</returns>
         </member>
     </members>
 </doc>
