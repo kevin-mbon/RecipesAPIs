@@ -37,10 +37,10 @@ namespace RecipesAPIs.Services
             _recipe.DeleteOne(recipe => recipe.Id == id);
         }
        
-        public void GetRecipes(int count)
-        {
+        //public void GetRecipes(int count)
+        //{
 
-        }
+        //}
 
         public void Update(string id, Recipe recipe)
         {

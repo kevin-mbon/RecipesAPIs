@@ -16,6 +16,7 @@ namespace RecipesAPIs.Models
         public string Description { get; init; }
         [Required]
         public IEnumerable<string> Direction { get; init; }
+        [Required]
         public IEnumerable<string> Ingridients { get; init; }
         public DateTime Update { get; init; }
         public override string ToString()
